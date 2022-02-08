@@ -1,0 +1,55 @@
+{
+	"name": "DestinationDataset_z6z",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSynapseAnalytics1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlDWTable",
+		"schema": [
+			{
+				"name": "ID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "AssetName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MetricName",
+				"type": "nvarchar"
+			},
+			{
+				"name": "MetricField",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ReportingPeriod",
+				"type": "nvarchar"
+			},
+			{
+				"name": "TimeStamp",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "ReportingTime",
+				"type": "datetime",
+				"precision": 23,
+				"scale": 3
+			},
+			{
+				"name": "Value",
+				"type": "float",
+				"precision": 15
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "MetricHistoryValues"
+		}
+	}
+}
