@@ -18,6 +18,14 @@
 		"linkedService1_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'linkedService1'"
+		},
+		"Trigger_yoi_properties_CopyPipeline_yoi_parameters_windowStart": {
+			"type": "string",
+			"defaultValue": "@{addminutes(trigger().scheduledTime, -60)}"
+		},
+		"Trigger_yoi_properties_CopyPipeline_yoi_parameters_windowEnd": {
+			"type": "string",
+			"defaultValue": "@trigger().scheduledTime"
 		}
 	},
 	"variables": {
@@ -78,6 +86,26 @@
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "MetricHistoryValues"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_yoi')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSynapseAnalytics1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlDWTable",
+				"schema": [],
+				"typeProperties": {
+					"table": "<Custom query>"
 				}
 			},
 			"dependsOn": [
@@ -155,13 +183,70 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/metricHistoryValuesPipeline')]",
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_yoi')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "AzureSqlDatabase1",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [
+					{
+						"name": "ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AssetName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MetricName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MetricField",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ReportingPeriod",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TimeStamp",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ReportingTime",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "Value",
+						"type": "float",
+						"precision": 15
+					}
+				],
+				"typeProperties": {}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/CopyPipeline_yoi')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy_w4h",
+						"name": "Copy_yoi",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -174,16 +259,17 @@
 						"userProperties": [
 							{
 								"name": "Source",
-								"value": "dbo.MetricHistoryValues"
+								"value": "."
 							},
 							{
 								"name": "Destination",
-								"value": "dbo.MetricHistoryValues"
+								"value": ".<Custom query>"
 							}
 						],
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
+								"sqlReaderQuery": "select * from MetricHistoryValues\nwhere timestamp>= DATEADD(minute, -60, GETDATE())",
 								"partitionOption": "None"
 							},
 							"sink": {
@@ -291,14 +377,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "SourceDataset_w4h",
+								"referenceName": "SourceDataset_yoi",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "DestinationDataset_w4h",
+								"referenceName": "DestinationDataset_yoi",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -309,12 +395,59 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
+				"parameters": {
+					"windowStart": {
+						"type": "String"
+					},
+					"windowEnd": {
+						"type": "String"
+					}
+				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_w4h')]",
-				"[concat(variables('factoryId'), '/datasets/DestinationDataset_w4h')]",
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_yoi')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_yoi')]",
 				"[concat(variables('factoryId'), '/linkedServices/linkedService1')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Trigger_yoi')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "CopyPipeline_yoi",
+							"type": "PipelineReference"
+						},
+						"parameters": {
+							"windowStart": {
+								"type": "Expression",
+								"value": "[parameters('Trigger_yoi_properties_CopyPipeline_yoi_parameters_windowStart')]"
+							},
+							"windowEnd": {
+								"type": "Expression",
+								"value": "[parameters('Trigger_yoi_properties_CopyPipeline_yoi_parameters_windowEnd')]"
+							}
+						}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 60,
+						"startTime": "2022-02-08T03:20:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/pipelines/CopyPipeline_yoi')]"
 			]
 		}
 	]
