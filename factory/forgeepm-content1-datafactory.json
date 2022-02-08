@@ -1,0 +1,9 @@
+{
+	"name": "forgeepm-content1-datafactory",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "f5da9d07-5f17-4a99-9809-c76fd4ecd7a8",
+		"tenantId": "96ece526-9c7d-48b0-8daf-8b93c90a5d18"
+	}
+}
