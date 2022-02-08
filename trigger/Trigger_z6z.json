@@ -1,0 +1,25 @@
+{
+	"name": "Trigger_z6z",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "metricHistoryValues",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 5,
+				"startTime": "2022-02-08T03:40:00Z",
+				"endTime": "2022-02-07T03:40:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
