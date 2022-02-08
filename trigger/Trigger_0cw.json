@@ -1,0 +1,24 @@
+{
+	"name": "Trigger_0cw",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Stopped",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "CopyPipeline_0cw",
+					"type": "PipelineReference"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Hour",
+				"interval": 24,
+				"startTime": "2022-02-08T01:23:00Z",
+				"timeZone": "UTC"
+			}
+		}
+	}
+}
