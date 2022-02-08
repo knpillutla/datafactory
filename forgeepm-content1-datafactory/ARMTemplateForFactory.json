@@ -18,14 +18,6 @@
 		"linkedService1_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'linkedService1'"
-		},
-		"Trigger_yoi_properties_CopyPipeline_yoi_parameters_windowStart": {
-			"type": "string",
-			"defaultValue": "@{addminutes(trigger().scheduledTime, -60)}"
-		},
-		"Trigger_yoi_properties_CopyPipeline_yoi_parameters_windowEnd": {
-			"type": "string",
-			"defaultValue": "@trigger().scheduledTime"
 		}
 	},
 	"variables": {
@@ -33,13 +25,13 @@
 	},
 	"resources": [
 		{
-			"name": "[concat(parameters('factoryName'), '/CopyPipeline_yoi')]",
+			"name": "[concat(parameters('factoryName'), '/metricHistoryValues')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"activities": [
 					{
-						"name": "Copy_yoi",
+						"name": "Copy_z6z",
 						"type": "Copy",
 						"dependsOn": [],
 						"policy": {
@@ -52,28 +44,27 @@
 						"userProperties": [
 							{
 								"name": "Source",
-								"value": "."
+								"value": "dbo.MetricHistoryValues"
 							},
 							{
 								"name": "Destination",
-								"value": ".<Custom query>"
+								"value": "dbo.MetricHistoryValues"
 							}
 						],
 						"typeProperties": {
 							"source": {
 								"type": "AzureSqlSource",
-								"sqlReaderQuery": "select * from MetricHistoryValues\nwhere timestamp>= DATEADD(minute, -60, GETDATE())",
 								"partitionOption": "None"
 							},
 							"sink": {
 								"type": "SqlDWSink",
+								"preCopyScript": "truncate table MetricHistoryValues",
 								"allowPolyBase": true,
 								"polyBaseSettings": {
 									"rejectValue": 0,
 									"rejectType": "value",
 									"useTypeDefault": true
-								},
-								"tableOption": "autoCreate"
+								}
 							},
 							"enableStaging": true,
 							"stagingSettings": {
@@ -170,14 +161,14 @@
 						},
 						"inputs": [
 							{
-								"referenceName": "SourceDataset_yoi",
+								"referenceName": "SourceDataset_z6z",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
 						],
 						"outputs": [
 							{
-								"referenceName": "DestinationDataset_yoi",
+								"referenceName": "DestinationDataset_z6z",
 								"type": "DatasetReference",
 								"parameters": {}
 							}
@@ -188,24 +179,16 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"parameters": {
-					"windowStart": {
-						"type": "String"
-					},
-					"windowEnd": {
-						"type": "String"
-					}
-				},
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/SourceDataset_yoi')]",
-				"[concat(variables('factoryId'), '/datasets/DestinationDataset_yoi')]",
+				"[concat(variables('factoryId'), '/datasets/SourceDataset_z6z')]",
+				"[concat(variables('factoryId'), '/datasets/DestinationDataset_z6z')]",
 				"[concat(variables('factoryId'), '/linkedServices/linkedService1')]"
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DestinationDataset_w4h')]",
+			"name": "[concat(parameters('factoryName'), '/DestinationDataset_z6z')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -215,7 +198,46 @@
 				},
 				"annotations": [],
 				"type": "AzureSqlDWTable",
-				"schema": [],
+				"schema": [
+					{
+						"name": "ID",
+						"type": "int",
+						"precision": 10
+					},
+					{
+						"name": "AssetName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MetricName",
+						"type": "nvarchar"
+					},
+					{
+						"name": "MetricField",
+						"type": "nvarchar"
+					},
+					{
+						"name": "ReportingPeriod",
+						"type": "nvarchar"
+					},
+					{
+						"name": "TimeStamp",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "ReportingTime",
+						"type": "datetime",
+						"precision": 23,
+						"scale": 3
+					},
+					{
+						"name": "Value",
+						"type": "float",
+						"precision": 15
+					}
+				],
 				"typeProperties": {
 					"schema": "dbo",
 					"table": "MetricHistoryValues"
@@ -226,27 +248,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DestinationDataset_yoi')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSynapseAnalytics1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlDWTable",
-				"schema": [],
-				"typeProperties": {
-					"table": "<Custom query>"
-				}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSynapseAnalytics1')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_w4h')]",
+			"name": "[concat(parameters('factoryName'), '/SourceDataset_z6z')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -316,63 +318,6 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/SourceDataset_yoi')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "AzureSqlDatabase1",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "AzureSqlTable",
-				"schema": [
-					{
-						"name": "ID",
-						"type": "int",
-						"precision": 10
-					},
-					{
-						"name": "AssetName",
-						"type": "nvarchar"
-					},
-					{
-						"name": "MetricName",
-						"type": "nvarchar"
-					},
-					{
-						"name": "MetricField",
-						"type": "nvarchar"
-					},
-					{
-						"name": "ReportingPeriod",
-						"type": "nvarchar"
-					},
-					{
-						"name": "TimeStamp",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "ReportingTime",
-						"type": "datetime",
-						"precision": 23,
-						"scale": 3
-					},
-					{
-						"name": "Value",
-						"type": "float",
-						"precision": 15
-					}
-				],
-				"typeProperties": {}
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/AzureSqlDatabase1')]"
-			]
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/AzureSqlDatabase1')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -418,24 +363,7 @@
 			"properties": {
 				"annotations": [],
 				"runtimeState": "Stopped",
-				"pipelines": [
-					{
-						"pipelineReference": {
-							"referenceName": "CopyPipeline_yoi",
-							"type": "PipelineReference"
-						},
-						"parameters": {
-							"windowStart": {
-								"type": "Expression",
-								"value": "[parameters('Trigger_yoi_properties_CopyPipeline_yoi_parameters_windowStart')]"
-							},
-							"windowEnd": {
-								"type": "Expression",
-								"value": "[parameters('Trigger_yoi_properties_CopyPipeline_yoi_parameters_windowEnd')]"
-							}
-						}
-					}
-				],
+				"pipelines": [],
 				"type": "ScheduleTrigger",
 				"typeProperties": {
 					"recurrence": {
@@ -446,8 +374,37 @@
 					}
 				}
 			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Trigger_z6z')]",
+			"type": "Microsoft.DataFactory/factories/triggers",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"runtimeState": "Stopped",
+				"pipelines": [
+					{
+						"pipelineReference": {
+							"referenceName": "metricHistoryValues",
+							"type": "PipelineReference"
+						},
+						"parameters": {}
+					}
+				],
+				"type": "ScheduleTrigger",
+				"typeProperties": {
+					"recurrence": {
+						"frequency": "Minute",
+						"interval": 5,
+						"startTime": "2022-02-08T03:40:00Z",
+						"endTime": "2022-02-08T03:40:00Z",
+						"timeZone": "UTC"
+					}
+				}
+			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/pipelines/CopyPipeline_yoi')]"
+				"[concat(variables('factoryId'), '/pipelines/metricHistoryValues')]"
 			]
 		}
 	]

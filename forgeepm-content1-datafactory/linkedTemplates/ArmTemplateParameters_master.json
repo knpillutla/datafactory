@@ -14,12 +14,6 @@
 		"linkedService1_connectionString": {
 			"value": ""
 		},
-		"Trigger_yoi_properties_CopyPipeline_yoi_parameters_windowStart": {
-			"value": "@{addminutes(trigger().scheduledTime, -60)}"
-		},
-		"Trigger_yoi_properties_CopyPipeline_yoi_parameters_windowEnd": {
-			"value": "@trigger().scheduledTime"
-		},
 		"containerUri": {
 			"value": ""
 		},
