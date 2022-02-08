@@ -1,0 +1,8272 @@
+{
+	"name": "CopyPipeline_0cw",
+	"properties": {
+		"activities": [
+			{
+				"name": "ForEach_0cw",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@pipeline().parameters.cw_items",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Copy_0cw",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [
+								{
+									"name": "Source",
+									"value": "@{item().source.schema}.@{item().source.table}"
+								},
+								{
+									"name": "Destination",
+									"value": "@{item().destination.schema}.@{item().destination.table}"
+								}
+							],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "SqlDWSink",
+									"writeBehavior": "Upsert",
+									"upsertSettings": {
+										"keys": []
+									},
+									"tableOption": "autoCreate"
+								},
+								"enableStaging": false,
+								"parallelCopies": 4,
+								"validateDataConsistency": false,
+								"translator": {
+									"value": "@item().copyActivity.translator",
+									"type": "Expression"
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "SourceDataset_0cw",
+									"type": "DatasetReference",
+									"parameters": {
+										"cw_schema": "@item().source.schema",
+										"cw_table": "@item().source.table"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DestinationDataset_0cw",
+									"type": "DatasetReference",
+									"parameters": {
+										"cw_schema": "@item().destination.schema",
+										"cw_table": "@item().destination.table"
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"cw_items": {
+				"type": "Array",
+				"defaultValue": [
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ActiveFaultHistoriesV2"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ActiveFaultHistoriesV2"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "FaultSeverity",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "FaultSeverity",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EventStatus",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "EventStatus",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Autoreset",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "Autoreset",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "StartTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "StartTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "EndTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "EndTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FaultName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultVisualisationData",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FaultVisualisationData",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DestinationType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "DestinationType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultState",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "FaultState",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentName_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EquipmentName_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentId_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EquipmentId_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedUser_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "CreatedUser_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultDisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FaultDisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ActiveFaultHistoryV2ClusteredId",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "ActiveFaultHistoryV2ClusteredId",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultMode",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "FaultMode",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "CloseTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CloseTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "InputData",
+											"type": "String"
+										},
+										"sink": {
+											"name": "InputData",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Expression",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Expression",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ModeTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ModeTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Recommendation",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Recommendation",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MessageType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "MessageType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Causes",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Causes",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Consequences",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Consequences",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EventName_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EventName_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "TrendDetailJSon",
+											"type": "String"
+										},
+										"sink": {
+											"name": "TrendDetailJSon",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "AcceptedUser_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "AcceptedUser_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "CloseOutV2_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "CloseOutV2_PK_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "EventCategory_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "EventCategory_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ReasonCode",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReasonCode",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDateTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDateTime",
+											"type": "DateTime"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Alerts"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Alerts"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Alert_ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Alert_ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Asset_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Asset_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "VariableName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "VariableName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "AlertName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AlertName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "Colour",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Colour",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "AssetKPIConfigurations"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "AssetKPIConfigurations"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "AssetKPIConfigurationId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "AssetKPIConfigurationId",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Asset",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Asset",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "KPI",
+											"type": "String"
+										},
+										"sink": {
+											"name": "KPI",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UoM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "UoM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Recommendation",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Recommendation",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "RaiseEventOverride",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "RaiseEventOverride",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "EventCategory",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EventCategory",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "AssetStatusReasonCode"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "AssetStatusReasonCode"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetStatusReasonCodeID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "AssetStatusReasonCodeID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetStatusReasonCode_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "AssetStatusReasonCode_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetStatusReasonCodeClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "AssetStatusReasonCodeClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "AttributeCategories"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "AttributeCategories"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "AttributeCategory_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "AttributeCategory_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "AttributeCategoryClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "AttributeCategoryClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "AttributeTypes"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "AttributeTypes"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "FilterTag",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FilterTag",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "AttributeType_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "AttributeType_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "AttributeTypeClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "AttributeTypeClusteredId",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "AttributeCategory_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "AttributeCategory_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "DataType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "DataType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "UOM_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "UOM_PK_ID",
+											"type": "Guid"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "AuditTrials"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "AuditTrials"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "AuditTrial_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "AuditTrial_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Model_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Model_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "NewValue",
+											"type": "String"
+										},
+										"sink": {
+											"name": "NewValue",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "OldValue",
+											"type": "String"
+										},
+										"sink": {
+											"name": "OldValue",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Property",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Property",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "PropertyData",
+											"type": "String"
+										},
+										"sink": {
+											"name": "PropertyData",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Timestamp",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "Timestamp",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "User",
+											"type": "String"
+										},
+										"sink": {
+											"name": "User",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "backup_MetricHistoryValues_backup_7_20_2021_7_30_PM"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "backup_MetricHistoryValues_backup_7_20_2021_7_30_PM"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AssetName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricField",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricField",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "Double"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "BWRComponentsProperties"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "BWRComponentsProperties"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "SpHeatC1",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SpHeatC1",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SpHeatC2",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SpHeatC2",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SpHeatC3",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SpHeatC3",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SpHeatC4",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SpHeatC4",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EnthC1",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "EnthC1",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EnthC2",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "EnthC2",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EnthC3",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "EnthC3",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EnthC4",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "EnthC4",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EntrC1",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "EntrC1",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EntrC2",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "EntrC2",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EntrC3",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "EntrC3",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EntrC4",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "EntrC4",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EntrC5",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "EntrC5",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "BWRComponentsProperty_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "BWRComponentsProperty_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Component_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Component_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "BWRComponentsPropertyClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "BWRComponentsPropertyClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "BWRPureComponentParameters"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "BWRPureComponentParameters"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ASR",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "ASR",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "BSR",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "BSR",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "CSR",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "CSR",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "A1QR",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "A1QR",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "B1QR",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "B1QR",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "C1QR",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "C1QR",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "ALPHA",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "ALPHA",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "GAMA",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "GAMA",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "BWRPureComponentParameter_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "BWRPureComponentParameter_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Component_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Component_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "BWRPureComponentParameterClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "BWRPureComponentParameterClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Cause"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Cause"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Cause_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Cause_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "CauseAction"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "CauseAction"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CauseAction_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "CauseAction_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Cause_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Cause_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Action_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Action_PK_ID",
+											"type": "Guid"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "CloseOutDetailsV2"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "CloseOutDetailsV2"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CloseOutDetailV2_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "CloseOutDetailV2_PK_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "CloseOutV2_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "CloseOutV2_PK_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Manual",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "Manual",
+											"type": "Boolean"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "CloseOutGeneralCommentsV2"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "CloseOutGeneralCommentsV2"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CloseOutGeneralCommentV2_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "CloseOutGeneralCommentV2_PK_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "CloseOutV2_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "CloseOutV2_PK_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "GeneralComment_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "GeneralComment_PK_ID",
+											"type": "Int64"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "CloseOutsV2"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "CloseOutsV2"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CloseOutV2_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "CloseOutV2_PK_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDate",
+											"type": "DateTimeOffset"
+										},
+										"sink": {
+											"name": "CreatedDate",
+											"type": "DateTimeOffset"
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedDate",
+											"type": "DateTimeOffset"
+										},
+										"sink": {
+											"name": "ModifiedDate",
+											"type": "DateTimeOffset"
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedUser_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModifiedUser_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "CloseOutDate",
+											"type": "DateTimeOffset"
+										},
+										"sink": {
+											"name": "CloseOutDate",
+											"type": "DateTimeOffset"
+										}
+									},
+									{
+										"source": {
+											"name": "CloseOutUser_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "CloseOutUser_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "EventCategory_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "EventCategory_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "EventCauseId_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EventCauseId_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Reason",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Reason",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReasonManual",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "ReasonManual",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "Causes",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Causes",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CausesManual",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "CausesManual",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "Consequences",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Consequences",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ConsequencesManual",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "ConsequencesManual",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "Recommendations",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Recommendations",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "RecommendationsManual",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "RecommendationsManual",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "ImpactType",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ImpactType",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ImpactCalculationName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ImpactCalculationName",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Comments"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Comments"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Asset_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Asset_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Author",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Author",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Comments",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Comments",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "StartTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "StartTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "EndTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "EndTime",
+											"type": "DateTime"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "CommentsV2"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "CommentsV2"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "CommentType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "CommentType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Text",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Text",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentId_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EquipmentId_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentName_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EquipmentName_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "LoggedBy_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "LoggedBy_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FaultName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultDisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FaultDisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CommentV2ClusteredId",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "CommentV2ClusteredId",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultHistoryV2ClusteredId",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "FaultHistoryV2ClusteredId",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "SavedCommentType",
+											"type": "String"
+										},
+										"sink": {
+											"name": "SavedCommentType",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Components"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Components"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ComponentName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ComponentName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Formula",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Formula",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MolecularWeight",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "MolecularWeight",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "CarbonCount",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "CarbonCount",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "H2Count",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "H2Count",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Component_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Component_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ComponentClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ComponentClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ConditionModes"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ConditionModes"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Model_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Model_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ConditionMode_ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ConditionMode_ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Label",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Label",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Expression",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Expression",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "User",
+											"type": "String"
+										},
+										"sink": {
+											"name": "User",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ContextHistoriesV2"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ContextHistoriesV2"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ContextVariable",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ContextVariable",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentId_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EquipmentId_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentName_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EquipmentName_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ContextHistoryV2ClusteredId",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "ContextHistoryV2ClusteredId",
+											"type": "Int64"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "demoDataCSV"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "demoDataCSV"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Attribute",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Attribute",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "DerivedKPIConfiguration"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "DerivedKPIConfiguration"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "AssetName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AssetName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricName",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "EquipmentCategories"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "EquipmentCategories"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentCategory_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "EquipmentCategory_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentCategoryClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "EquipmentCategoryClusteredId",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "FilterTag",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FilterTag",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "EquipmentStatus"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "EquipmentStatus"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "EquipmentId_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EquipmentId_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentName_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EquipmentName_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Status",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Status",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Priority",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Priority",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentStatusId",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "EquipmentStatusId",
+											"type": "Int64"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "EquipmentTypeAttributeTypesV2"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "EquipmentTypeAttributeTypesV2"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentTypeAttributeTypeV2_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "EquipmentTypeAttributeTypeV2_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentType_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "EquipmentType_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentTypeAttributeTypeV2ClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "EquipmentTypeAttributeTypeV2ClusteredId",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Type",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Type",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Units",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Units",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DataType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "DataType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "FilterTag",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FilterTag",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UOM_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "UOM_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "AttributeType_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "AttributeType_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "DefaultValue",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DefaultValue",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "PreserveLastState",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "PreserveLastState",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "DefaultHistorize",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "DefaultHistorize",
+											"type": "Boolean"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "EquipmentTypes"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "EquipmentTypes"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "OverviewImage",
+											"type": "String"
+										},
+										"sink": {
+											"name": "OverviewImage",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentType_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "EquipmentType_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentCategory_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "EquipmentCategory_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentTypeClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "EquipmentTypeClusteredId",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "FilterTag",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FilterTag",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Normal",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Normal",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Important",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Important",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Urgent",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Urgent",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Unmonitored",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Unmonitored",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Parent_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Parent_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ImageContent",
+											"type": "Byte[]"
+										},
+										"sink": {
+											"name": "ImageContent",
+											"type": "Byte[]"
+										}
+									},
+									{
+										"source": {
+											"name": "ParentAssetTypePath",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ParentAssetTypePath",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "EventCategories"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "EventCategories"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EventCategoryID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "EventCategoryID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "EventCategory_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "EventCategory_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "EventType_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "EventType_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "EventCategoryClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "EventCategoryClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "EventNotificationsV2"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "EventNotificationsV2"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "EventStatus",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "EventStatus",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultHistoryV2ClusteredId",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "FaultHistoryV2ClusteredId",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "Destinationtype",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Destinationtype",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultStatus",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "FaultStatus",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultState",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "FaultState",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "EventNotificationV2ClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "EventNotificationV2ClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "EventTypes"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "EventTypes"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EventTypeID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "EventTypeID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "EventType_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "EventType_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "EventTypeClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "EventTypeClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "FaultHistoryV2"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "FaultHistoryV2"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "FaultSeverity",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "FaultSeverity",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EventStatus",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "EventStatus",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Autoreset",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "Autoreset",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "StartTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "StartTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "EndTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "EndTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FaultName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultVisualisationData",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FaultVisualisationData",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DestinationType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "DestinationType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultState",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "FaultState",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentId_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EquipmentId_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentName_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EquipmentName_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedUser_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "CreatedUser_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultDisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FaultDisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultHistoryV2ClusteredId",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "FaultHistoryV2ClusteredId",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "FKActiveFaultHistoryV2ClusteredId",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "FKActiveFaultHistoryV2ClusteredId",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultMode",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "FaultMode",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "CloseTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CloseTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "InputData",
+											"type": "String"
+										},
+										"sink": {
+											"name": "InputData",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Expression",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Expression",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ModeTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ModeTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Recommendation",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Recommendation",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MessageType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "MessageType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Causes",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Causes",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Consequences",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Consequences",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EventName_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EventName_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "TrendDetailJSon",
+											"type": "String"
+										},
+										"sink": {
+											"name": "TrendDetailJSon",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "AcceptedUser_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "AcceptedUser_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "CloseOutV2_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "CloseOutV2_PK_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "EventCategory_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "EventCategory_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDateTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDateTime",
+											"type": "DateTime"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Faultmetric"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Faultmetric"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "equipmentname_eom",
+											"type": "String"
+										},
+										"sink": {
+											"name": "equipmentname_eom",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MessageType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "MessageType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Low",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Low",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Medium",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Medium",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "High",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "High",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "FaultPriortyCustomerTypeMap"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "FaultPriortyCustomerTypeMap"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "FaultPriortyCustomerTypeMap_PKID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "FaultPriortyCustomerTypeMap_PKID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultPriortyValue",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "FaultPriortyValue",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultPriortyString",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FaultPriortyString",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "StartRange",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "StartRange",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "EndRange",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "EndRange",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "FaultSignature"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "FaultSignature"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Id",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetId",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "AssetId",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "StartTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "StartTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "EndTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "EndTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ParentModel_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ParentModel_ID",
+											"type": "Guid"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "FaultSignatureVariables"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "FaultSignatureVariables"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "FaultSignatureVariable_ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "FaultSignatureVariable_ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "HighLimit",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "HighLimit",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "LowLimit",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "LowLimit",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "FaultSignature_ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "FaultSignature_ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "VariableName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "VariableName",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "FilterTypes"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "FilterTypes"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "FilterType_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "FilterType_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "FilterTypeName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FilterTypeName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "FilterTypeDescription",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FilterTypeDescription",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "GeneralComments"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "GeneralComments"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "GeneralComment_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "GeneralComment_PK_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDate",
+											"type": "DateTimeOffset"
+										},
+										"sink": {
+											"name": "CreatedDate",
+											"type": "DateTimeOffset"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedByUser_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "CreatedByUser_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "CommentType",
+											"type": "String"
+										},
+										"sink": {
+											"name": "CommentType",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Comment",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Comment",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "HistorizedTags"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "HistorizedTags"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "HistorizedTag_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "HistorizedTag_PK_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DataType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "DataType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Reference",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Reference",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "LastTimestamp",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "LastTimestamp",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "LastValue",
+											"type": "String"
+										},
+										"sink": {
+											"name": "LastValue",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "LastQuality",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "LastQuality",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "LastUOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "LastUOM",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "HistorizedValues"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "HistorizedValues"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "HistorizedValue_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "HistorizedValue_PK_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "HistorizedTag_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "HistorizedTag_PK_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "Timestamp",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "Timestamp",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Quality",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Quality",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "UOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "UOM",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "KpiTargetConfigurations"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "KpiTargetConfigurations"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "KpiTargetConfigurationId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "KpiTargetConfigurationId",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "DeviationLimit",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "DeviationLimit",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "LowLimitOverride",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "LowLimitOverride",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "HighLimitOverride",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "HighLimitOverride",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "TargetOverride",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "TargetOverride",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "EffectiveDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "EffectiveDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetKPIConfigurationId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "AssetKPIConfigurationId",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "MetricConfiguration"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "MetricConfiguration"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "assetName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "assetName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "path",
+											"type": "String"
+										},
+										"sink": {
+											"name": "path",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "kpiName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "kpiName",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "MetricHistoryValues"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "MetricHistoryValues"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AssetName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricField",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricField",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ReportingTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "Double"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "metrichistoryvalues_20210920"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "metrichistoryvalues_20210920"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AssetName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricField",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricField",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ReportingTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "Double"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "MetricHistoryValues_Backup_20092021"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "MetricHistoryValues_Backup_20092021"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AssetName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricField",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricField",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ReportingTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "Double"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "MetricHistoryValues_Backup_30_09_2021"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "MetricHistoryValues_Backup_30_09_2021"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AssetName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricField",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricField",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ReportingTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "Double"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "MetricHistoryValuesBackup_20210921"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "MetricHistoryValuesBackup_20210921"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AssetName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "MetricField",
+											"type": "String"
+										},
+										"sink": {
+											"name": "MetricField",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ReportingTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "Double"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ModelCategory"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ModelCategory"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ModelCategory_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModelCategory_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ModelParameterValues"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ModelParameterValues"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Model_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Model_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelTemplateParameters_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModelTemplateParameters_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Models"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Models"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Model_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Model_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Project_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Project_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Asset_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Asset_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ModelName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelDisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ModelDisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelDescription",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ModelDescription",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelTemplate_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModelTemplate_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "IsTrained",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "IsTrained",
+											"type": "Boolean"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ModelScheduleMappings"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ModelScheduleMappings"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Model_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Model_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Period",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Period",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "PeriodType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "PeriodType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "IsActive",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "IsActive",
+											"type": "Boolean"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ModelTemplateParameters"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ModelTemplateParameters"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ModelTemplateParameters_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModelTemplateParameters_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelTemplate_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModelTemplate_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ParameterName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ParameterName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DefaultValue",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DefaultValue",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Datatype",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Datatype",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Direction",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Direction",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "IsDefault",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "IsDefault",
+											"type": "Boolean"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ModelTemplates"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ModelTemplates"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ModelTemplate_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModelTemplate_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "IsPublished",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "IsPublished",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelCategory_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModelCategory_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "IsDefaultTemplate",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "IsDefaultTemplate",
+											"type": "Boolean"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ModelTypeParameters"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ModelTypeParameters"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ModelTypeParameters_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModelTypeParameters_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelType_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModelType_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ParamterName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ParamterName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DefaultValue",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DefaultValue",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Datatype",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Datatype",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ModelTypes"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ModelTypes"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ModelType_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModelType_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelTypeName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ModelTypeName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelTypeDescription",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ModelTypeDescription",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ModelVariableMappings"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ModelVariableMappings"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Model_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Model_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "TagName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "TagName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "IsSoftSensorEstimated",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "IsSoftSensorEstimated",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "DependentVariables",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DependentVariables",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "AccuracyScore",
+											"type": "Decimal"
+										},
+										"sink": {
+											"name": "AccuracyScore",
+											"type": "Decimal"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ModeTypes"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ModeTypes"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ModeType_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModeType_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ModeTypeName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ModeTypeName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ModeTypeDescription",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ModeTypeDescription",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Colour",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Colour",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "NotesV2"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "NotesV2"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Text",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Text",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "NoteType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "NoteType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentId_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EquipmentId_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EquipmentName_EOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EquipmentName_EOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "LoggedBy_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "LoggedBy_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "NoteV2ClusteredId",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "NoteV2ClusteredId",
+											"type": "Int64"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "OperationAttributes"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "OperationAttributes"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "OperationAttribute_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "OperationAttribute_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Operation_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Operation_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DataDirection",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "DataDirection",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "UOM_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "UOM_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ValueType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ValueType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "DefaultMappingType",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "DefaultMappingType",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "DefaultMappingValue",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DefaultMappingValue",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "OperationCategories"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "OperationCategories"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "OperationCategory_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "OperationCategory_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "OperationCategoryClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "OperationCategoryClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "OperationModes"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "OperationModes"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Model_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Model_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "OperationMode_ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "OperationMode_ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Label",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Label",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Colour",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Colour",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Expression",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Expression",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Operations"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Operations"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelExecutionStructure",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ModelExecutionStructure",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Operation_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Operation_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "OperationClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "OperationClusteredId",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "OperationType_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "OperationType_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "OperationCategory_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "OperationCategory_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "GlobalOperation_PK_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "GlobalOperation_PK_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "AllowMultipleInstances",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "AllowMultipleInstances",
+											"type": "Boolean"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "OperationTypes"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "OperationTypes"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "OperationType_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "OperationType_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "OperationTypeClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "OperationTypeClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "PatternMode"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "PatternMode"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Id",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelId",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ModelId",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ModeId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ModeId",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "TimeStamp",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ModeDetails",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ModeDetails",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "IsReTrained",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "IsReTrained",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "CountOfflatvector",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "CountOfflatvector",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ProjectAssetMappings"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ProjectAssetMappings"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Project_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Project_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Asset_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Asset_ID",
+											"type": "Guid"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Projects"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Projects"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Project_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Project_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ProjectName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ProjectName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ProjectDescription",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ProjectDescription",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Reason"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Reason"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Reason_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Reason_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "IsDeleted",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "IsDeleted",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDateUtc",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDateUtc",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedBy",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "CreatedBy",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "UpdatedDateUtc",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "UpdatedDateUtc",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "UpdatedBy",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "UpdatedBy",
+											"type": "Guid"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ReasonCategory"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ReasonCategory"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ReasonCategory_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ReasonCategory_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "IsDeleted",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "IsDeleted",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDateUtc",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDateUtc",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedBy",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "CreatedBy",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "UpdatedDateUtc",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "UpdatedDateUtc",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "UpdatedBy",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "UpdatedBy",
+											"type": "Guid"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ReasonCategoryReason"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ReasonCategoryReason"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ReasonCategoryReason_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ReasonCategoryReason_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ReasonCategory_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ReasonCategory_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Reason_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Reason_ID",
+											"type": "Guid"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ReasonCause"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ReasonCause"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ReasonCause_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ReasonCause_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Reason_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Reason_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Cause_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Cause_PK_ID",
+											"type": "Guid"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ReasonCode"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ReasonCode"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReasonCodeID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ReasonCodeID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "ReasonCode_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ReasonCode_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ReasonCodeClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ReasonCodeClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ReasonCodeV2"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ReasonCodeV2"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ReasonCodeV2_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ReasonCodeV2_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Code",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Code",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReasonCategory_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ReasonCategory_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Reason_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Reason_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Cause_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Cause_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Action_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Action_PK_ID",
+											"type": "Guid"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ReasonCodeV2AssetType"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ReasonCodeV2AssetType"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ReasonCodeV2AssetType_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ReasonCodeV2AssetType_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ReasonCodeV2_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ReasonCodeV2_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetType",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AssetType",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ReplacementTypes"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ReplacementTypes"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ReplacementType_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ReplacementType_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ReplacementTypeName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReplacementTypeName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReplacementTypeDescription",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReplacementTypeDescription",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ReportingPeriodConfig"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ReportingPeriodConfig"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ExternalID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ExternalID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EffectiveStartDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "EffectiveStartDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "EffectiveEndDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "EffectiveEndDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Occurrence",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Occurrence",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "StartTime",
+											"type": "String"
+										},
+										"sink": {
+											"name": "StartTime",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EndTime",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EndTime",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "StartMinute",
+											"type": "Int16"
+										},
+										"sink": {
+											"name": "StartMinute",
+											"type": "Int16"
+										}
+									},
+									{
+										"source": {
+											"name": "EndMinute",
+											"type": "Int16"
+										},
+										"sink": {
+											"name": "EndMinute",
+											"type": "Int16"
+										}
+									},
+									{
+										"source": {
+											"name": "NextDay",
+											"type": "String"
+										},
+										"sink": {
+											"name": "NextDay",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedBy",
+											"type": "String"
+										},
+										"sink": {
+											"name": "CreatedBy",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UpdatedBy",
+											"type": "String"
+										},
+										"sink": {
+											"name": "UpdatedBy",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDateTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDateTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "UpdatedDateTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "UpdatedDateTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReportingPeriod",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ReportingPeriodConfigurationBackup_20092021"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ReportingPeriodConfigurationBackup_20092021"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "AnchorTime",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AnchorTime",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Duration",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Duration",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Interval",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Interval",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ReportingPeriodDetails"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ReportingPeriodDetails"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingPeriodID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "ReportingPeriodID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "WareHouseDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "WareHouseDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Days",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Days",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "StartTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "StartTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "EndTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "EndTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedBy",
+											"type": "String"
+										},
+										"sink": {
+											"name": "CreatedBy",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UpdatedBy",
+											"type": "String"
+										},
+										"sink": {
+											"name": "UpdatedBy",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDateTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDateTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "UpdatedDateTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "UpdatedDateTime",
+											"type": "DateTime"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "ReportPeriodConfiguration"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "ReportPeriodConfiguration"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "DisplayName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "DisplayName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "AnchorTime",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AnchorTime",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Duration",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Duration",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Interval",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Interval",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "NoOfSlots",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "NoOfSlots",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "SaturatedAirs"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "SaturatedAirs"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "SatTemp",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "SatTemp",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "SatPres",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SatPres",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SaturatedAir_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "SaturatedAir_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "SaturatedAirClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "SaturatedAirClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Status"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Status"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Status_ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Status_ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "StatusName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "StatusName",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "SteamTables"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "SteamTables"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "SatTemp",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "SatTemp",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "SatPres",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SatPres",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SatLiqEnth",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SatLiqEnth",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SatVapEnth",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SatVapEnth",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SatLiqEntr",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SatLiqEntr",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SatVapEntr",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SatVapEntr",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SatLiqSpVol",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SatLiqSpVol",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SatVapSpVol",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SatVapSpVol",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SteamTable_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "SteamTable_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "SteamTableClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "SteamTableClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "sysdiagrams"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "sysdiagrams"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "principal_id",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "principal_id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "diagram_id",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "diagram_id",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "version",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "version",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "definition",
+											"type": "Byte[]"
+										},
+										"sink": {
+											"name": "definition",
+											"type": "Byte[]"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "TestingDetails"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "TestingDetails"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Testing_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "Testing_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "Model_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Model_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "StartTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "StartTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "EndTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "EndTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "IsActive",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "IsActive",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Message",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Message",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Status_ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Status_ID",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "TrainingDetails"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "TrainingDetails"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Training_ID",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "Training_ID",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "Model_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Model_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "StartTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "StartTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "EndTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "EndTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "IsActive",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "IsActive",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "Status_ID",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Status_ID",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "ModelScore",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "ModelScore",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Message",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Message",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "UOMs"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "UOMs"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UnitID",
+											"type": "String"
+										},
+										"sink": {
+											"name": "UnitID",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UOM_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "UOM_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Units",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Units",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UOMClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "UOMClusteredId",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "UOMType_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "UOMType_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Label",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Label",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "UOMTypes"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "UOMTypes"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Label",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Label",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UOMType_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "UOMType_PK_ID",
+											"type": "Guid"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Users"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Users"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "UserId",
+											"type": "String"
+										},
+										"sink": {
+											"name": "UserId",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "FirstName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "FirstName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "LastName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "LastName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EmailId",
+											"type": "String"
+										},
+										"sink": {
+											"name": "EmailId",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "RoleName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "RoleName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "User_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "User_PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "UserClusteredId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "UserClusteredId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Variables"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Variables"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "TagName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "TagName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Attribute",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Attribute",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UOM",
+											"type": "String"
+										},
+										"sink": {
+											"name": "UOM",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "RangeLow",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "RangeLow",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "RangeHigh",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "RangeHigh",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "IsIndependant",
+											"type": "Boolean"
+										},
+										"sink": {
+											"name": "IsIndependant",
+											"type": "Boolean"
+										}
+									},
+									{
+										"source": {
+											"name": "Description",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Description",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "LimitLow",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "LimitLow",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "LimitHigh",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "LimitHigh",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "Calculation",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Calculation",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "PredictionInterval",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "PredictionInterval",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "Replacement",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Replacement",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "Filter",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "Filter",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "FilterParameter",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "FilterParameter",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SigmaLimitHigh",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SigmaLimitHigh",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SigmaLimitLow",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SigmaLimitLow",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "LearningHorizon",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "LearningHorizon",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "Source",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Source",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "SigmaLimitHighValue",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SigmaLimitHighValue",
+											"type": "Double"
+										}
+									},
+									{
+										"source": {
+											"name": "SigmaLimitLowValue",
+											"type": "Double"
+										},
+										"sink": {
+											"name": "SigmaLimitLowValue",
+											"type": "Double"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "Versions"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "Versions"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "InstalledDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "InstalledDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "InstalledUser",
+											"type": "String"
+										},
+										"sink": {
+											"name": "InstalledUser",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "VersionNumber",
+											"type": "String"
+										},
+										"sink": {
+											"name": "VersionNumber",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "VersionDescription",
+											"type": "String"
+										},
+										"sink": {
+											"name": "VersionDescription",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "VersionId",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "VersionId",
+											"type": "Int32"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "WorkerPlan"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "WorkerPlan"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "PK_ID",
+											"type": "Guid"
+										}
+									},
+									{
+										"source": {
+											"name": "ExternalWorkerId",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ExternalWorkerId",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ReportingPeriodName",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ReportingPeriodName",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "EffectiveDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "EffectiveDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Department",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Department",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "JobFunction",
+											"type": "String"
+										},
+										"sink": {
+											"name": "JobFunction",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Location",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Location",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ExternalSpvsrId",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ExternalSpvsrId",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedBy",
+											"type": "String"
+										},
+										"sink": {
+											"name": "CreatedBy",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "UpdatedBy",
+											"type": "String"
+										},
+										"sink": {
+											"name": "UpdatedBy",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDateTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDateTime",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "UpdatedDateTime",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "UpdatedDateTime",
+											"type": "DateTime"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "dbo",
+							"table": "WorkOrder"
+						},
+						"destination": {
+							"schema": "dbo",
+							"table": "WorkOrder"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Id",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "Id",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "Title",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Title",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ActiveFaultHistoryV2ClusteredId",
+											"type": "Int64"
+										},
+										"sink": {
+											"name": "ActiveFaultHistoryV2ClusteredId",
+											"type": "Int64"
+										}
+									},
+									{
+										"source": {
+											"name": "AssetId",
+											"type": "String"
+										},
+										"sink": {
+											"name": "AssetId",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Name",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Name",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Priority",
+											"type": "Int32"
+										},
+										"sink": {
+											"name": "Priority",
+											"type": "Int32"
+										}
+									},
+									{
+										"source": {
+											"name": "DueDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "DueDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "Comments",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Comments",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedBy",
+											"type": "String"
+										},
+										"sink": {
+											"name": "CreatedBy",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "CreatedDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedBy",
+											"type": "String"
+										},
+										"sink": {
+											"name": "ModifiedBy",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										},
+										"sink": {
+											"name": "ModifiedDate",
+											"type": "DateTime"
+										}
+									},
+									{
+										"source": {
+											"name": "CmmsRefId",
+											"type": "String"
+										},
+										"sink": {
+											"name": "CmmsRefId",
+											"type": "String"
+										}
+									}
+								]
+							}
+						}
+					},
+					{
+						"source": {
+							"schema": "SystemCatalogs",
+							"table": "AppConfigs"
+						},
+						"destination": {
+							"schema": "SystemCatalogs",
+							"table": "AppConfigs"
+						},
+						"copyActivity": {
+							"translator": {
+								"type": "TabularTranslator",
+								"mappings": [
+									{
+										"source": {
+											"name": "Key",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Key",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Value",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Value",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "Owner",
+											"type": "String"
+										},
+										"sink": {
+											"name": "Owner",
+											"type": "String"
+										}
+									},
+									{
+										"source": {
+											"name": "AppConfig_PK_ID",
+											"type": "Guid"
+										},
+										"sink": {
+											"name": "AppConfig_PK_ID",
+											"type": "Guid"
+										}
+									}
+								]
+							}
+						}
+					}
+				]
+			}
+		},
+		"annotations": []
+	}
+}
