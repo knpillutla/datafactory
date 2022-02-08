@@ -1,0 +1,150 @@
+{
+	"name": "metricHistoryValuesPipeline",
+	"properties": {
+		"activities": [
+			{
+				"name": "Copy_w4h",
+				"type": "Copy",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "7.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [
+					{
+						"name": "Source",
+						"value": "dbo.MetricHistoryValues"
+					},
+					{
+						"name": "Destination",
+						"value": "dbo.MetricHistoryValues"
+					}
+				],
+				"typeProperties": {
+					"source": {
+						"type": "AzureSqlSource",
+						"partitionOption": "None"
+					},
+					"sink": {
+						"type": "SqlDWSink",
+						"allowPolyBase": true,
+						"polyBaseSettings": {
+							"rejectValue": 0,
+							"rejectType": "value",
+							"useTypeDefault": true
+						},
+						"tableOption": "autoCreate"
+					},
+					"enableStaging": true,
+					"stagingSettings": {
+						"linkedServiceName": {
+							"referenceName": "linkedService1",
+							"type": "LinkedServiceReference"
+						}
+					},
+					"translator": {
+						"type": "TabularTranslator",
+						"mappings": [
+							{
+								"source": {
+									"name": "ID",
+									"type": "Int32"
+								},
+								"sink": {
+									"name": "ID",
+									"type": "Int32"
+								}
+							},
+							{
+								"source": {
+									"name": "AssetName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "AssetName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MetricName",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MetricName",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "MetricField",
+									"type": "String"
+								},
+								"sink": {
+									"name": "MetricField",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "ReportingPeriod",
+									"type": "String"
+								},
+								"sink": {
+									"name": "ReportingPeriod",
+									"type": "String"
+								}
+							},
+							{
+								"source": {
+									"name": "TimeStamp",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "TimeStamp",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "ReportingTime",
+									"type": "DateTime"
+								},
+								"sink": {
+									"name": "ReportingTime",
+									"type": "DateTime"
+								}
+							},
+							{
+								"source": {
+									"name": "Value",
+									"type": "Double"
+								},
+								"sink": {
+									"name": "Value",
+									"type": "Double"
+								}
+							}
+						]
+					}
+				},
+				"inputs": [
+					{
+						"referenceName": "SourceDataset_w4h",
+						"type": "DatasetReference"
+					}
+				],
+				"outputs": [
+					{
+						"referenceName": "DestinationDataset_w4h",
+						"type": "DatasetReference"
+					}
+				]
+			}
+		],
+		"annotations": []
+	}
+}
